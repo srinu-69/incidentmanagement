@@ -1,0 +1,42 @@
+[
+  {
+    "id": "INC-001",
+    "service": "payment-api",
+    "severity": "SEV1",
+    "description": "API returning 500 errors after deployment",
+    "status": "Open",
+    "created_at": "2026-02-16T09:00:00"
+  },
+  {
+    "id": "INC-002",
+    "service": "nginx-gateway",
+    "severity": "SEV2",
+    "description": "High latency observed on ingress controller",
+    "status": "Investigating",
+    "created_at": "2026-02-16T09:10:00"
+  },
+  {
+    "id": "INC-003",
+    "service": "kafka-stream",
+    "severity": "SEV1",
+    "description": "Consumer lag increasing rapidly in production",
+    "status": "Mitigated",
+    "created_at": "2026-02-16T09:20:00"
+  },
+  {
+    "id": "INC-004",
+    "service": "prometheus-monitoring",
+    "severity": "SEV3",
+    "description": "Node exporter metrics missing intermittently",
+    "status": "Open",
+    "created_at": "2026-02-16T09:25:00"
+  },
+  {
+    "id": "INC-005",
+    "service": "python",
+    "severity": "SEV5",
+    "description": "python is a python",
+    "status": "Open",
+    "created_at": "2026-02-16T22:36:15.625809"
+  }
+]
