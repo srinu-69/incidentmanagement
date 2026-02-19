@@ -160,4 +160,4 @@ def list_all():
 # RUN APP
 # -------------------------
 if __name__ == '__main__':
-    app.run(host="192.168.56.102",port=5000,debug=True)
+    app.run(port=5000,debug=True)
