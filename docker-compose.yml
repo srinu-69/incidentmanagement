@@ -1,10 +1,7 @@
-version: '3.8'
-
 services:
 
   db:
     image: mariadb:10.6
-    container_name: mariadb_container
     environment:
       MYSQL_ROOT_PASSWORD: srinu
       MYSQL_DATABASE: pypro
@@ -15,13 +12,7 @@ services:
 
   app:
     build: .
-    container_name: flask_container
     depends_on:
       - db
-    environment:
-      DB_HOST: db
-      DB_USER: pyuser
-      DB_PASSWORD: py123
-      DB_NAME: pypro
     ports:
       - "5000:5000"
