@@ -1,10 +1,10 @@
-# databaseconnection.py
+import os
 import mysql.connector
 
 def get_db_connection():
     return mysql.connector.connect(
-        host="db",  # Use the service name defined in docker-compose.yml
-        user="pyuser",
-        password="py123",
-        database="pypro"
+        host=os.getenv("DB_HOST", "localhost"),
+        user=os.getenv("DB_USER", "pyuser"),
+        password=os.getenv("DB_PASSWORD", "py123"),
+        database=os.getenv("DB_NAME", "pypro")
     )
