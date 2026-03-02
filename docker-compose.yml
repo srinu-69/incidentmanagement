@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-
   db:
     image: mariadb:10.6
     environment:
@@ -9,8 +8,11 @@ services:
       MYSQL_DATABASE: pypro
       MYSQL_USER: pyuser
       MYSQL_PASSWORD: py123
+    ports:
+      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+
 
   app:
     build: .
