@@ -1,17 +1,17 @@
 version: '3.8'
 
 services:
- db:
-  image: mariadb:10.6
-  environment:
-    MYSQL_ROOT_PASSWORD: srinu
-    MYSQL_DATABASE: pypro
-    MYSQL_USER: pyuser
-    MYSQL_PASSWORD: py123
-  volumes:
-    - db_data:/var/lib/mysql
-    - ./db-init:/docker-entrypoint-initdb.d
 
+  db:
+    image: mariadb:10.6
+    environment:
+      MYSQL_ROOT_PASSWORD: srinu
+      MYSQL_DATABASE: pypro
+      MYSQL_USER: pyuser
+      MYSQL_PASSWORD: py123
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db-init:/docker-entrypoint-initdb.d
 
   app:
     build: .
