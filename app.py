@@ -10,6 +10,7 @@ from db_operations import (
     delete_incident
 )
 
+app = Flask(__name__)
 
 @app.context_processor
 # add current year for footer
@@ -17,7 +18,6 @@ from db_operations import (
 def inject_current_year():
     return {'current_year': datetime.utcnow().year}
 
-app = Flask(__name__)
 app.secret_key = "supersecretkey"  # Required for flash messages
 
 
