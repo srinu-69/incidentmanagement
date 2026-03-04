@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
+from datetime import datetime
 from db_operations import (
     create_incident,
     list_incidents,
@@ -8,6 +9,13 @@ from db_operations import (
     update_severity,
     delete_incident
 )
+
+
+@app.context_processor
+# add current year for footer
+
+def inject_current_year():
+    return {'current_year': datetime.utcnow().year}
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # Required for flash messages
