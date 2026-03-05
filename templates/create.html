@@ -1,29 +1,49 @@
 {% extends "base.html" %}
+
 {% block title %}Create Incident{% endblock %}
+
+{% block header %}
+  <h3 class="mb-0">Create New Incident</h3>
+  <div class="muted">Define severity and status like real on-call.</div>
+{% endblock %}
+
 {% block content %}
-<h2>Create New Incident</h2>
-<form method="POST">
-    <label>Service:</label>
-    <input type="text" name="service" required>
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Service Name</label>
+      <input type="text" name="service" class="form-control" required>
+    </div>
 
-    <label>Severity:</label>
-    <select name="severity" required>
-        <option value="SEV1">SEV1</option>
-        <option value="SEV2">SEV2</option>
-        <option value="SEV3">SEV3</option>
-    </select>
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Severity</label>
+      <select name="severity" class="form-select" required>
+        <option value="SEV1">SEV1 - Critical</option>
+        <option value="SEV2">SEV2 - High</option>
+        <option value="SEV3">SEV3 - Medium</option>
+      </select>
+    </div>
 
-    <label>Description:</label>
-    <input type="text" name="description" required>
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Description</label>
+      <textarea name="description" class="form-control" rows="3" required></textarea>
+    </div>
 
-    <label>Status:</label>
-    <select name="status" required>
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Status</label>
+      <select name="status" class="form-select" required>
         <option value="Open">Open</option>
         <option value="Investigating">Investigating</option>
         <option value="Mitigated">Mitigated</option>
         <option value="Resolved">Resolved</option>
-    </select>
+      </select>
+    </div>
 
-    <button type="submit" class="btn">Create Incident</button>
-</form>
+    <button type="submit" class="btn btn-success px-4">
+      <i class="bi bi-check-circle"></i> Create Incident
+    </button>
+
+    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary ms-2">
+      Back
+    </a>
+  </form>
 {% endblock %}

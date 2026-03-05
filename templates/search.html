@@ -1,11 +1,29 @@
 {% extends "base.html" %}
-{% block title %}Search Incident{% endblock %}
-{% block content %}
-<h2>Enter Incident ID to {{ operation }}</h2>
 
-<form method="POST">
-    <label for="iid">Incident ID</label>
-    <input type="text" name="iid" id="iid" placeholder="Enter Incident ID" required>
-    <button type="submit" class="btn">Submit</button>
-</form>
+{% block title %}Search Incident{% endblock %}
+
+{% block header %}
+  <h3 class="mb-0">Search Incident</h3>
+  <div class="muted">Enter an ID to {{ operation }}</div>
+{% endblock %}
+
+{% block content %}
+  <form method="POST" class="text-center">
+    <h4 class="mb-3">
+      <i class="bi bi-search text-primary"></i>
+      Enter Incident ID to {{ operation|capitalize }}
+    </h4>
+
+    <div class="mb-3">
+      <input type="text" name="iid" class="form-control" placeholder="INC-001" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary px-4">
+      Continue
+    </button>
+
+    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary ms-2">
+      Back
+    </a>
+  </form>
 {% endblock %}

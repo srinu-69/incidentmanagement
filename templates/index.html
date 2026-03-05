@@ -1,15 +1,27 @@
-﻿{% extends "base.html" %}
-{% block title %}Home - Incident Management{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Incident Management{% endblock %}
+
+{% block header %}
+  <h3 class="mb-0">Incident Management</h3>
+  <div class="muted">Choose an operation to continue</div>
+{% endblock %}
+
 {% block content %}
-<h1>Incident Management  CI/CD deployment</h1>
-<form method="POST" action="/">
-    <label for="operation">Choose an operation:</label>
-    <select name="operation" id="operation">
+  <form method="POST" action="/">
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Operation</label>
+      <select name="operation" class="form-select">
         <option value="create">Create Incident</option>
-        <option value="view">View Incidents</option>
-        <option value="update">Update Incident</option>
-        <option value="delete">Delete Incident</option>
-    </select>
-    <button type="submit" class="btn">Go</button>
-</form>
+        <option value="view">View Incident (by ID)</option>
+        <option value="update">Update Incident (by ID)</option>
+        <option value="delete">Delete Incident (by ID)</option>
+      </select>
+      <div class="form-text muted">This mimics common incident workflows in SRE teams.</div>
+    </div>
+
+    <button class="btn btn-primary px-4" type="submit">
+      Continue <i class="bi bi-arrow-right"></i>
+    </button>
+  </form>
 {% endblock %}

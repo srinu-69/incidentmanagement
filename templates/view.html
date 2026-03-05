@@ -1,19 +1,74 @@
 {% extends "base.html" %}
-{% block title %}View Incident{% endblock %}
-{% block content %}
-<h2>Incident Details</h2>
-<div class="details">
-    <p><strong>ID:</strong> {{ incident.id }}</p>
-    <p><strong>Service:</strong> {{ incident.service }}</p>
-    <p><strong>Severity:</strong> {{ incident.severity }}</p>
-    <p><strong>Status:</strong> {{ incident.status }}</p>
-    <p><strong>Description:</strong> {{ incident.description }}</p>
-    <p><strong>Created At:</strong> {{ incident.created_at }}</p>
-</div>
 
-<div class="actions">
-    <a href="{{ url_for('update', iid=incident.id) }}" class="btn">Update</a>
-    <a href="{{ url_for('delete', iid=incident.id) }}" class="btn">Delete</a>
-    <a href="{{ url_for('index') }}" class="btn">Back to Home</a>
-</div>
+{% block title %}Incident {{ incident.id }}{% endblock %}
+
+{% block header %}
+  <h3 class="mb-0">Incident {{ incident.id }}</h3>
+  <div class="muted">Details & lifecycle status</div>
+{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    {% if incident.severity == 'SEV1' %}
+      <span class="badge text-bg-danger">SEV1 Critical</span>
+    {% elif incident.severity == 'SEV2' %}
+      <span class="badge text-bg-warning">SEV2 High</span>
+    {% else %}
+      <span class="badge text-bg-info">SEV3 Medium</span>
+    {% endif %}
+
+    {% if incident.status == 'Open' %}
+      <span class="badge text-bg-primary"><i class="bi bi-exclamation-circle"></i> Open</span>
+    {% elif incident.status == 'Investigating' %}
+      <span class="badge text-bg-secondary"><i class="bi bi-search"></i> Investigating</span>
+    {% elif incident.status == 'Mitigated' %}
+      <span class="badge text-bg-warning"><i class="bi bi-shield"></i> Mitigated</span>
+    {% else %}
+      <span class="badge text-bg-success"><i class="bi bi-check-circle"></i> Resolved</span>
+    {% endif %}
+  </div>
+
+  {# lifecycle progress bar #}
+  {% set order = ['Open','Investigating','Mitigated','Resolved'] %}
+  {% set idx = order.index(incident.status) if incident.status in order else 0 %}
+  <div class="mb-4">
+    <div class="fw-semibold mb-2">Lifecycle</div>
+    <div class="d-flex flex-wrap gap-2">
+      <div class="step {% if idx==0 %}active{% elif idx>0 %}done{% endif %}">
+        <i class="bi bi-exclamation-circle"></i> Open
+      </div>
+      <div class="step {% if idx==1 %}active{% elif idx>1 %}done{% endif %}">
+        <i class="bi bi-search"></i> Investigating
+      </div>
+      <div class="step {% if idx==2 %}active{% elif idx>2 %}done{% endif %}">
+        <i class="bi bi-shield"></i> Mitigated
+      </div>
+      <div class="step {% if idx==3 %}active{% endif %}">
+        <i class="bi bi-check-circle"></i> Resolved
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="fw-semibold muted">Service</div>
+      <div class="fs-5">{{ incident.service }}</div>
+    </div>
+    <div class="col-md-6">
+      <div class="fw-semibold muted">Created</div>
+      <div class="fs-6">{{ incident.created_at }}</div>
+    </div>
+    <div class="col-12">
+      <div class="fw-semibold muted">Description</div>
+      <div class="p-3 rounded-4" style="border:1px solid var(--border); background:rgba(0,0,0,.02);">
+        {{ incident.description }}
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 d-flex flex-wrap gap-2">
+    <a class="btn btn-outline-warning" href="{{ url_for('update', iid=incident.id) }}"><i class="bi bi-pencil-square"></i> Update</a>
+    <a class="btn btn-outline-danger" href="{{ url_for('delete', iid=incident.id) }}"><i class="bi bi-trash3"></i> Delete</a>
+    <a class="btn btn-outline-secondary" href="{{ url_for('index') }}"><i class="bi bi-arrow-left"></i> Back</a>
+  </div>
 {% endblock %}
