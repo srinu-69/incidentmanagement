@@ -1,3 +1,5 @@
+
+
 CREATE TABLE IF NOT EXISTS incidents_p (
     id INT AUTO_INCREMENT PRIMARY KEY,
     incident_code VARCHAR(50),
