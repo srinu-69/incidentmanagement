@@ -4,18 +4,33 @@ metadata:
   name: incident-app
   labels:
     app: incident-app
+
 spec:
   replicas: 2
+
   selector:
     matchLabels:
       app: incident-app
+
   template:
     metadata:
       labels:
         app: incident-app
+
     spec:
       containers:
       - name: incident-container
         image: srinivs2201/incidentmanagement:latest
+
         ports:
         - containerPort: 8000
+
+        env:
+        - name: DB_HOST
+          value: database-1.c5a0qkqs821q.eu-north-1.rds.amazonaws.com
+        - name: DB_USER
+          value: admin
+        - name: DB_PASSWORD
+          value: srinurds
+        - name: DB_NAME
+          value: pypro

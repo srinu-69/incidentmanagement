@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS incidents_p (
     incident_code VARCHAR(50),
     service VARCHAR(100),
     severity VARCHAR(50),
-    description TEXT,
+    description TEXT,s
     status VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
