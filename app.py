@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, Response
 from datetime import datetime
-from prometheus_client import Counter, generate_latest
-from flask import Response
+
+# Prometheus imports (fixed)
+from prometheus_client import Counter, generate_latest, CollectorRegistry, CONTENT_TYPE_LATEST, multiprocess
+
 from db_operations import (
     create_incident,
     list_incidents,
@@ -13,14 +15,40 @@ from db_operations import (
 )
 
 app = Flask(__name__)
+app.secret_key = "supersecretkey"
 
+
+# -------------------------
+# CONTEXT PROCESSOR
+# -------------------------
 @app.context_processor
-# add current year for footer
-
 def inject_current_year():
     return {'current_year': datetime.utcnow().year}
 
-app.secret_key = "supersecretkey"  # Required for flash messages
+
+# -------------------------
+# PROMETHEUS SETUP (FIXED)
+# -------------------------
+
+# IMPORTANT: Do NOT attach registry to Counter in multiprocess mode
+REQUEST_COUNT = Counter('app_requests_total', 'Total number of requests')
+
+
+def get_registry():
+    registry = CollectorRegistry()
+    multiprocess.MultiProcessCollector(registry)
+    return registry
+
+
+@app.before_request
+def before_request():
+    REQUEST_COUNT.inc()
+
+
+@app.route('/metrics')
+def metrics():
+    registry = get_registry()
+    return Response(generate_latest(registry), mimetype=CONTENT_TYPE_LATEST)
 
 
 # -------------------------
@@ -66,7 +94,7 @@ def create_page():
 
 
 # -------------------------
-# SEARCH (for view/update/delete)
+# SEARCH
 # -------------------------
 @app.route('/search/<operation>', methods=['GET', 'POST'])
 def search(operation):
@@ -158,27 +186,16 @@ def delete(iid):
 
 
 # -------------------------
-# OPTIONAL: LIST ALL INCIDENTS
+# LIST
 # -------------------------
 @app.route('/list')
 def list_all():
     incidents = list_incidents()
     return render_template('list.html', incidents=incidents)
 
-REQUEST_COUNT = Counter('app_requests_total', 'Total number of requests')
-
-@app.route('/metrics')
-def metrics():
-    return Response(generate_latest(), mimetype='text/plain')
-@app.before_request
-def before_request():
-    REQUEST_COUNT.inc()
-
-
-
 
 # -------------------------
-# RUN APP
+# LOCAL RUN (DEV ONLY)
 # -------------------------
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000)

@@ -3,26 +3,38 @@ FROM python:3.10-slim AS builder
 
 WORKDIR /app
 
-# Install build dependencies
-RUN apt-get update && apt-get install -y gcc build-essential
+# Install only required build deps (minimal)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc && \
+    rm -rf /var/lib/apt/lists/*
 
+# Copy only requirements first (for caching)
 COPY requirements.txt .
 
-# Install dependencies into a separate directory
+# Install dependencies into a clean directory
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 
-# ---------- Stage 2: Final Runtime Image ----------
+# ---------- Stage 2: Runtime ----------
 FROM python:3.10-slim
 
 WORKDIR /app
 
-# Copy installed dependencies from builder
+# Set env early (important for Prometheus multiprocess)
+ENV PYTHONUNBUFFERED=1
+ENV prometheus_multiproc_dir=/tmp
+
+# Create directory for Prometheus multiprocess
+RUN mkdir -p /tmp && chmod 777 /tmp
+
+# Copy installed dependencies
 COPY --from=builder /install /usr/local
 
-# Copy application code
+# Copy app code (after deps → caching benefit)
 COPY . .
 
+# Expose correct port (Gunicorn)
 EXPOSE 8000
 
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "app:app"]
+# Run app with optimized Gunicorn config
+CMD ["gunicorn", "-w", "2", "--threads", "2", "-b", "0.0.0.0:8000", "app:app"]
