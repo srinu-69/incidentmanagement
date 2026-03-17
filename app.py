@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from datetime import datetime
+from prometheus_client import Counter, generate_latest
+from flask import Response
 from db_operations import (
     create_incident,
     list_incidents,
@@ -162,6 +164,17 @@ def delete(iid):
 def list_all():
     incidents = list_incidents()
     return render_template('list.html', incidents=incidents)
+
+REQUEST_COUNT = Counter('app_requests_total', 'Total number of requests')
+
+@app.route('/metrics')
+def metrics():
+    return Response(generate_latest(), mimetype='text/plain')
+@app.before_request
+def before_request():
+    REQUEST_COUNT.inc()
+
+
 
 
 # -------------------------

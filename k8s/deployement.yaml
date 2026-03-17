@@ -21,6 +21,7 @@ spec:
       containers:
       - name: incident-container
         image: srinivs2201/incidentmanagement:latest
+        imagePullPolicy: Always
 
         ports:
         - containerPort: 8000
